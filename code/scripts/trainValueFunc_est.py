@@ -1,10 +1,10 @@
 # Set GPU
 import os
-# import tensorflow as tf
+import tensorflow as tf
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-# tf.logging.set_verbosity(tf.logging.INFO)
-# print('\nRunning from GPU %s' % str(os.environ['CUDA_VISIBLE_DEVICES']))
+tf.logging.set_verbosity(tf.logging.INFO)
+print('\nRunning from GPU %s' % str(os.environ['CUDA_VISIBLE_DEVICES']))
 
 import numpy as np
 import cPickle as pickle
@@ -25,7 +25,10 @@ from multiprocessing import Process, Queue
 
 ### Data getting functions
 
+# GUSTAVO: Essa função recole o nome dos arquivos que estão na fila fileQueue e deserializa os objetos.
+# GUSTAVO: Ao final coloca na fila resQueue que sera consumida pela a função loadSupervisedData
 def loadFile(fileQueue,resQueue,deleteFile):
+    
     while True:
         labeledFile_path, labeledFile_done = fileQueue.get()
         try:
@@ -59,6 +62,9 @@ def loadFile(fileQueue,resQueue,deleteFile):
         
         resQueue.put((states_nnet,outputs))
 
+
+# GUSTAVO: Essa função adiciono o nome dos arquios onde estão os dados na fila fileQueu que sera consumida pela loadFile.
+# GUSTAVO: Depois pega os objetos da fila resQueue e coloca em batch na fila dataQueue.
 def loadSupervisedData(dataQueue,batchSize,Environment,labeledData,deleteFile,fileQueue,resQueue):
     states_all = np.array([])
     outputs_all = np.array([])
@@ -125,13 +131,13 @@ print("Saving arguments to %s" % (argsSaveLoc))
 with open(argsSaveLoc, "wb") as f:
     pickle.dump(args, f, protocol=1)
 
-Environment = env_utils.getEnvironment(args.env)
+Environment = env_utils.getEnvironment(args.env) # GUSTAVO cria o objeto cubo, que está em environments.cube_interactive_simple. obs moveType="qtm"
 
 exampleState = np.expand_dims(Environment.generate_envs(1, [0, 0])[0][0],0)
 inputDim = list(Environment.state_to_nnet_input(exampleState).shape[1:])
 print("Input shape %s" % (inputDim))
 
-# numGPUs = len(os.environ['CUDA_VISIBLE_DEVICES'].split(","))
+numGPUs = len(os.environ['CUDA_VISIBLE_DEVICES'].split(","))
 
 scrambleRange = [args.scramb_min,args.scramb_max]
 scrambleTests = range(scrambleRange[0],scrambleRange[1]+1)
@@ -146,11 +152,7 @@ assert(args.mom_c_s >= 1)
 assert(args.drop_p < 1.0)
 
 
-solveItrs = args.solve_itrs
-if args.debug:
-    displayItrs = 100
-else:
-    displayItrs = 100
+displayItrs = 100
 
 saveItrs = 10000
 
@@ -164,7 +166,7 @@ dataQueue = Queue(100)
 
 numPools = 1
 print("Starting %i data queue runners" % (numPools))
-
+ 
 fileQueue = Queue()
 resQueue = Queue(100)
 
@@ -177,6 +179,10 @@ for i in range(numPools):
 loadProc = Process(target=loadSupervisedData, args=(dataQueue,args.batch_size,Environment,args.labeled_data,args.delete_labeled,fileQueue,resQueue,))
 loadProc.daemon = True
 loadProc.start()
+
+
+
+###GUSTAVO Aqui começa as definições para o TF.
 
 ### Initialize input dataset
 def gen():
@@ -218,12 +224,12 @@ while (trainItr < args.max_itrs) and ((args.eps is None) or (cost > args.eps)):
     heuristicFn = nnet_utils.getEstimatorPredFn(network,inputDim,Environment)
     
     # Check convergence
-    if args.labeled_data != "":
+    if args.labeled_data != "": ## GUSTAVO: Calcula o erro
         valData = [[],[]]
         for _ in range(0,100):
             data = dataQueue.get()
-            valData[0].append(data[0][:,0,:])
-            valData[1].append(data[1])
+            valData[0].append(data[0][:,0,:]) ## GUSTAVO: imput  
+            valData[1].append(data[1])        ## GUSTAVO: label
 
         valData[0] = np.concatenate(valData[0],axis=0)
         valData[1] = np.concatenate(valData[1],axis=0)
