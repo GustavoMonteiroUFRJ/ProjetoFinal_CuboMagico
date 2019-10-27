@@ -11,6 +11,9 @@ def getEnvironment(envName):
     if envName == 'cube3':
         from environments.cube_interactive_simple import Cube
         Environment = Cube(N=3,moveType="qtm")
+    elif envName == 'cube3_cross':
+        from environments.cube_cross_stap import Cube_cross_step
+        Environment = Cube_cross_step(N=3,moveType="qtm")
     elif envName == 'cube3htm':
         from environments.cube_interactive_simple import Cube
         Environment = Cube(N=3,moveType="htm")
@@ -52,7 +55,8 @@ def getEnvironment(envName):
 
     return(Environment)
 
-
+## GUSTAVO essa gunção não é chamada em nenhum momento !!
+'''
 def generate_envs(Environment,numPuzzles,scrambleRange,probs=None):
     assert(scrambleRange[0] > 0)
     scrambs = range(scrambleRange[0],scrambleRange[1]+1)
@@ -86,5 +90,4 @@ def generate_envs(Environment,numPuzzles,scrambleRange,probs=None):
         puzzles.append(scrambled)
         puzzles_symm.append(scrambled_symm)
     return(puzzles,scrambleNums,moves,puzzles_symm)
-
-
+'''

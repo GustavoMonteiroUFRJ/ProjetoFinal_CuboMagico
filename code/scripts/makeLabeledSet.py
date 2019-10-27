@@ -250,9 +250,6 @@ if __name__ ==  '__main__':
 
     assert(args.num_parallel >= 1)
 
-    envName = args.env
-    envName = envName.lower()
-
     ### Start data getters
     numDataJobs = 1
     dataQueue = Queue(numDataJobs)
