@@ -55,7 +55,7 @@ def getEnvironment(envName):
 
     return(Environment)
 
-## GUSTAVO essa gunção não é chamada em nenhum momento !!
+## GUSTAVO essa funaoo nao e chamada em nenhum momento !!
 '''
 def generate_envs(Environment,numPuzzles,scrambleRange,probs=None):
     assert(scrambleRange[0] > 0)

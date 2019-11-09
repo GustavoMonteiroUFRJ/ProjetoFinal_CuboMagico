@@ -25,8 +25,8 @@ from multiprocessing import Process, Queue
 
 ### Data getting functions
 
-# GUSTAVO: Essa função recole o nome dos arquivos que estão na fila fileQueue e deserializa os objetos.
-# GUSTAVO: Ao final coloca na fila resQueue que sera consumida pela a função loadSupervisedData
+# GUSTAVO: Essa funcao recole o nome dos arquivos que estao na fila fileQueue e deserializa os objetos.
+# GUSTAVO: Ao final coloca na fila resQueue que sera consumida pela a funcao loadSupervisedData
 def loadFile(fileQueue,resQueue,deleteFile):
     
     while True:
@@ -63,7 +63,7 @@ def loadFile(fileQueue,resQueue,deleteFile):
         resQueue.put((states_nnet,outputs))
 
 
-# GUSTAVO: Essa função adiciono o nome dos arquios onde estão os dados na fila fileQueu que sera consumida pela loadFile.
+# GUSTAVO: Essa funcao adiciono o nome dos arquios onde estao os dados na fila fileQueu que sera consumida pela loadFile.
 # GUSTAVO: Depois pega os objetos da fila resQueue e coloca em batch na fila dataQueue.
 def loadSupervisedData(dataQueue,batchSize,Environment,labeledData,deleteFile,fileQueue,resQueue):
     states_all = np.array([])
@@ -131,7 +131,7 @@ print("Saving arguments to %s" % (argsSaveLoc))
 with open(argsSaveLoc, "wb") as f:
     pickle.dump(args, f, protocol=1)
 
-Environment = env_utils.getEnvironment(args.env) # GUSTAVO cria o objeto cubo, que está em environments.cube_interactive_simple. obs moveType="qtm"
+Environment = env_utils.getEnvironment(args.env) # GUSTAVO cria o objeto cubo, que esta em environments.cube_interactive_simple. obs moveType="qtm"
 
 exampleState = np.expand_dims(Environment.generate_envs(1, [0, 0])[0][0],0)
 inputDim = list(Environment.state_to_nnet_input(exampleState).shape[1:])
@@ -182,7 +182,7 @@ loadProc.start()
 
 
 
-###GUSTAVO Aqui começa as definições para o TF.
+###GUSTAVO Aqui comeca as definicoes para o TF.
 
 ### Initialize input dataset
 def gen():

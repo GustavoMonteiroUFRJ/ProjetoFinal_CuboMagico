@@ -236,7 +236,7 @@ def statesToStatesList(states,env):
 
     return(tf.cast(outRep,tf.float32))
 
-## GUSTAVO: Aparetemente o core do modelo está aqui! (ainda preciso investigar mais)
+## GUSTAVO: Aparetemente o core do modelo esta aqui! (ainda preciso investigar mais)
 def model_fn(features,labels,mode,args):
     if type(features) == type(dict()):
         states = features["x"][:,0,:]

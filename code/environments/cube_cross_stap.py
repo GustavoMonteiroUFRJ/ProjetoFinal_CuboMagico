@@ -111,18 +111,18 @@ class Cube_cross_step:
         self.corner_index = np.append(self.corner_index, [[15,33,36]], axis=0)
         self.corner_index = np.append(self.corner_index, [[9,42,18]], axis=0)    
         
-        self.edge_index = np.array([[3,50]], dtype=int) #A
-        self.edge_index = np.append(self.edge_index, [[1,23]], axis=0) #B
-        self.edge_index = np.append(self.edge_index, [[5,41]], axis=0) #C
-        self.edge_index = np.append(self.edge_index, [[7,32]], axis=0) #D
-        self.edge_index = np.append(self.edge_index, [[25,46]], axis=0) #E
-        self.edge_index = np.append(self.edge_index, [[19,43]], axis=0) #F
-        self.edge_index = np.append(self.edge_index, [[34,37]], axis=0) #G
-        self.edge_index = np.append(self.edge_index, [[28,52]], axis=0) #L
-        self.edge_index = np.append(self.edge_index, [[14,48]], axis=0) #M
-        self.edge_index = np.append(self.edge_index, [[10,21]], axis=0) #N
-        self.edge_index = np.append(self.edge_index, [[12,39]], axis=0) #P
-        self.edge_index = np.append(self.edge_index, [[16,30]], axis=0) #R
+        self.edge_index = np.array([[3,50]], dtype=int) #A 0
+        self.edge_index = np.append(self.edge_index, [[1,23]], axis=0) #B 1
+        self.edge_index = np.append(self.edge_index, [[5,41]], axis=0) #C 2
+        self.edge_index = np.append(self.edge_index, [[7,32]], axis=0) #D 3
+        self.edge_index = np.append(self.edge_index, [[25,46]], axis=0) #E 4
+        self.edge_index = np.append(self.edge_index, [[19,43]], axis=0) #F 5
+        self.edge_index = np.append(self.edge_index, [[34,37]], axis=0) #G 6
+        self.edge_index = np.append(self.edge_index, [[28,52]], axis=0) #L 7
+        self.edge_index = np.append(self.edge_index, [[14,48]], axis=0) #M 8
+        self.edge_index = np.append(self.edge_index, [[10,21]], axis=0) #N 9
+        self.edge_index = np.append(self.edge_index, [[12,39]], axis=0) #P 10
+        self.edge_index = np.append(self.edge_index, [[16,30]], axis=0) #R 11
 
 
         self.crossIndex = np.array([[1,3,4,5,7,13,22,23,31,32,40,41,49,50]], dtype=int)  # wite cross index
@@ -427,7 +427,7 @@ class Cube_cross_step:
         #cubesRet = np.expand_dims(np.stack(cubesRet,0),1)
         return(cubesRet)
 
-    ## GUSTAVO: TODO ALTERAR ESSA FUNCAO !!! Para checar se a cruz está feita! 
+    ## GUSTAVO: TODO ALTERAR ESSA FUNCAO !!! Para checar se a cruz esta feita! 
     def checkSolved(self,colors):
         
         colors = colors.astype(int) 
@@ -438,7 +438,7 @@ class Cube_cross_step:
             for face in range(0,54,9):
                 i = cross_index + face
                 if (np.min(colors[i] == self.solvedState[i])):
-                    ## GUSTAVO: TODO fazer um rebase. provavelmente não nessa função
+                    ## GUSTAVO: TODO fazer um rebase. provavelmente nao nessa funcao
                     # print(colors, 'face = ', face)
                     return(np.min(True))
             return(np.min(False))
@@ -450,7 +450,7 @@ class Cube_cross_step:
                 for face in range(0,54,9):
                     i = cross_index + face
                     if (np.min(color[i] == self.solvedState[i])):
-                        ## GUSTAVO: TODO fazer um rebase. provavelmente não nessa função
+                        ## GUSTAVO: TODO fazer um rebase. provavelmente nao nessa funcao
                         ret[j] = np.min(True)
                         # print(j, color, 'face = ', int(face/9))
                         break
@@ -537,7 +537,7 @@ class Cube_cross_step:
                     corner_to_chenge = np.random.choice( corner_out_pattern, 2, replace=False)
                     corner_position_mix_pattern[corner_to_chenge] = corner_position_mix_pattern[np.flip(corner_to_chenge)]
                 else:
-                    print("Algo muito errado aconteceu, provavelmente o próprio padrão desejaval não seja resolvivel.")
+                    print("Algo muito errado aconteceu, provavelmente o proprio padrao desejaval nao seja resolvivel.")
 
         #### ORIENTATION
         # desired cross patter 
