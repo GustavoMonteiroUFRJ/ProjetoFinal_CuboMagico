@@ -132,7 +132,15 @@ class Cube_x:
         self.crossIndex = np.append(self.crossIndex, [[4,5,12,13,19,22,31,34,37,39,40,41,43,49]], axis=0) # orange cross index
         self.crossIndex = np.append(self.crossIndex, [[3,4,13,14,22,25,28,31,40,46,48,49,50,52]], axis=0) # red cross index   
 
-
+        self.sample_group = dict()
+        self.sample_group['gift_box'] = np.array([15,1,17,3,4,5,9,7,11, 6,10,8,12,13,14,0,16,2, 53,52,51,21,22,23,38,37,36, 44,43,42,30,31,32,47,46,45, 26,25,24,39,40,41,29,28,27, 35,34,33,48,49,50,20,19,18], dtype=int)
+        self.sample_group['cube_in_the_cube'] = np.array([51,48,45,3,4,46,6,7,47, 9,10,36,12,13,37,44,41,38, 18,19,11,21,22,14,15,16,17, 8,28,29,5,31,32,2,1,0, 20,23,26,39,40,25,42,43,24, 33,30,27,34,49,50,35,52,53], dtype=int)
+        self.sample_group['displaced_motif'] = np.array([15,12,9,3,4,10,6,7,11, 2,5,8,1,13,14,0,16,17, 44,19,42,41,22,39,38,37,36, 27,28,29,30,31,32,47,46,45, 26,25,24,23,40,21,20,43,18, 35,34,33,48,49,50,51,52,53], dtype=int)
+        self.sample_group['six_spots'] = np.array([51,48,45,52,4,46,53,50,47, 42,39,36,43,13,37,44,41,38, 9,10,11,12,22,14,15,16,17, 8,7,6,5,31,3,2,1,0, 20,23,26,19,40,25,18,21,24, 33,30,27,34,49,28,35,32,29], dtype=int)
+        self.sample_group['order_in_chaos'] = np.array([35,1,33,52,4,46,6,50,27, 9,39,20,43,13,14,24,41,26, 18,10,36,12,22,23,44,16,38, 47,7,29,5,31,3,45,34,51, 11,37,17,19,40,25,42,21,15, 2,30,8,48,49,28,0,32,53], dtype=int)
+        
+        
+        
         ### Colors to nnet representation
         # TODO only works for 3x3x3
         #  WHITE:0 - U
@@ -586,8 +594,15 @@ class Cube_x:
         return build(corner_position_mix_pattern, edge_position_mix_pattern, corner_orientetion_mix, edge_orientetion_mix)
     
     # Passa da representação possição orientação para cores
-    def build(corner_position, edge_position, corner_orientetion, edge_orientation):
+    def build(self, corner_position, edge_position, corner_orientetion, edge_orientation):
         cubo = self.solvedState.copy() # Apenas para pegar o shape e os centros.
+
+        corner_position = np.array(corner_position, dtype=np.int)
+        edge_position = np.array(edge_position, dtype=np.int)
+        corner_orientetion = np.array(corner_orientetion, dtype=np.int)
+        edge_orientation = np.array(edge_orientation, dtype=np.int)
+
+
         c_orientetions = np.array([[0,1,2],[2,0,1],[1,2,0]])
         e_orientetions = np.array([[0,1],[1,0]])
 
