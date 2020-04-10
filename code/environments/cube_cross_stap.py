@@ -485,6 +485,7 @@ class Cube_cross_step:
         
         #### PERMITATION
         # desired cross patter 
+        # cross_edge_position = []
         cross_edge_position = [0,1,2,3]
         cross_corner_position = []
 
@@ -541,6 +542,7 @@ class Cube_cross_step:
 
         #### ORIENTATION
         # desired cross patter 
+        # cross_edge_position = []
         cross_edge_position = [0,1,2,3]
         cross_corner_position = []
 
@@ -583,7 +585,25 @@ class Cube_cross_step:
         # print(edge_orientetion_mix)
 
         return build(corner_position_mix_pattern, edge_position_mix_pattern, corner_orientetion_mix, edge_orientetion_mix)
- 
+    
+    # Passa da representação possição orientação para cores
+    def build(corner_position, edge_position, corner_orientetion, edge_orientation):
+        cubo = self.solvedState.copy() # Apenas para pegar o shape e os centros.
+        c_orientetions = np.array([[0,1,2],[2,0,1],[1,2,0]])
+        e_orientetions = np.array([[0,1],[1,0]])
+
+        for corner_i in range(len(self.corner_index)):
+            coner_stickers_index = self.corner_index[corner_i]
+            cubo[coner_stickers_index] = self.corner_index[corner_position[corner_i]]
+            cubo[coner_stickers_index] = cubo[coner_stickers_index][c_orientetions[corner_orientetion[corner_i]]]
+
+        for edge_i in range(len(self.edge_index)):
+            edge_stickers_index = self.edge_index[edge_i]
+            cubo[edge_stickers_index] = self.edge_index[edge_position[edge_i]]
+            cubo[edge_stickers_index] = cubo[edge_stickers_index][e_orientetions[edge_orientation[edge_i]]]
+                
+        return cubo
+
     # GUSTAVO: retorna uma lista de numCubes cubos embaralhados com ate scrambleRange movimentos.
     def generate_envs(self,numCubes,scrambleRange,probs=None,returnMoves=False):
         assert(scrambleRange[0] >= 0)

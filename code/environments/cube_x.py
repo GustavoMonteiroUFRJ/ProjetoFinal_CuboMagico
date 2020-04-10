@@ -27,40 +27,6 @@ import argparse
 #from solver_algs import Optimal
 
 
-"""
-    Sticker representation
-    ----------------------
-    Each face is represented by a length [5, 3] array:
-
-    [v1, v2, v3, v4, v1]
-
-    Each sticker is represented by a length [9, 3] array:
-
-    [v1a, v1b, v2a, v2b, v3a, v3b, v4a, v4b, v1a]
-
-    In both cases, the first point is repeated to close the polygon.
-
-    Each face also has a centroid, with the face number appended
-    at the end in order to sort correctly using lexsort.
-    The centroid is equal to sum_i[vi].
-
-    Colors are accounted for using color indices and a look-up table.
-
-    With all faces in an NxNxN cube, then, we have three arrays:
-
-    centroids.shape = (6 * N * N, 4)
-    faces.shape = (6 * N * N, 5, 3)
-    stickers.shape = (6 * N * N, 9, 3)
-    colors.shape = (6 * N * N,)
-
-    The canonical order is found by doing
-
-    ind = np.lexsort(centroids.T)
-
-    After any rotation, this can be used to quickly restore the cube to
-    canonical position.
-"""
-
 class Cube_x:
 
     def tf_dtype(self):
@@ -434,35 +400,6 @@ class Cube_x:
         #cubesRet = np.expand_dims(np.stack(cubesRet,0),1)
         return(cubesRet)
 
-    ## GUSTAVO: TODO ALTERAR ESSA FUNCAO !!! Para checar se a cruz esta feita! 
-    def checkSolved(self,colors):
-        
-        colors = colors.astype(int) 
-        cross_index = np.array([1,3,4,5,7]) 
-
-        if len(colors.shape) == 1:  ##GUSTAVO: apenas um cubo
-            
-            for face in range(0,54,9):
-                i = cross_index + face
-                if (np.min(colors[i] == self.solvedState[i])):
-                    ## GUSTAVO: TODO fazer um rebase. provavelmente nao nessa funcao
-                    # print(colors, 'face = ', face)
-                    return(np.min(True))
-            return(np.min(False))
-        else: ## GUSTAVO: caso com diversos cubos.
-            ret = np.zeros(colors.shape[0],dtype=bool)
-            for j in range(len(colors)):
-                color = colors[j]
-                color = color.astype(int)
-                for face in range(0,54,9):
-                    i = cross_index + face
-                    if (np.min(color[i] == self.solvedState[i])):
-                        ## GUSTAVO: TODO fazer um rebase. provavelmente nao nessa funcao
-                        ret[j] = np.min(True)
-                        # print(j, color, 'face = ', int(face/9))
-                        break
-            return ret
-
     def getReward(self,colors,isSolved=None):
         reward = np.ones(shape=(colors.shape[0]))
         return(reward)
@@ -492,7 +429,6 @@ class Cube_x:
         
         #### PERMITATION
         # desired cross patter 
-        # cross_edge_position = []
         cross_edge_position = []
         cross_corner_position = []
 
@@ -618,6 +554,7 @@ class Cube_x:
                 
         return cubo
     
+    # Passa da representação por cores para possição orientação 
     def modelo_permutacao_orientacao(colors):
         corner_position = []
         edge_position = []
@@ -650,7 +587,7 @@ class Cube_x:
         
         return corner_position, edge_position, corner_orientetion, edge_orientation
 
-    # GUSTAVO: retorna uma lista de numCubes cubos embaralhados com ate scrambleRange movimentos.
+    # retorna uma lista de numCubes cubos embaralhados com ate scrambleRange movimentos.
     def generate_envs(self,numCubes,scrambleRange,probs=None,returnMoves=False):
         assert(scrambleRange[0] >= 0)
         scrambs = range(scrambleRange[0],scrambleRange[1]+1)
